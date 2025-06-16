@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversor de Moedas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <h1>Conversor de Moedas</h1>
+      <button id="toggleTheme">🌙</button>
+    </div>
+
+    <div class="form">
+      <input type="number" id="amount" placeholder="Valor em moeda de origem" />
+      <select id="fromCurrency"></select>
+      <select id="toCurrency"></select>
+      <button id="convertBtn">Converter</button>
+    </div>
+
+    <div id="loading">⏳ Carregando...</div>
+    <div class="result" id="result"></div>
+
+    <h2>Histórico de Conversões</h2>
+    <ul id="history"></ul>
+
+    <canvas id="chart" width="400" height="200"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
