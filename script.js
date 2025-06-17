@@ -9,7 +9,6 @@ const toggleBtn = document.getElementById('toggleTheme');
 const API_URL = 'https://api.exchangerate-api.com/v4/latest/';
 let chart;
 
-// === Carrega moedas disponíveis ===
 async function loadCurrencies() {
   const res = await fetch(API_URL + 'USD');
   const data = await res.json();
@@ -29,7 +28,6 @@ async function loadCurrencies() {
 
 loadCurrencies();
 
-// === Converte moeda ===
 convertBtn.addEventListener('click', async () => {
   const amount = parseFloat(document.getElementById('amount').value);
   const from = fromCurrency.value;
@@ -54,14 +52,12 @@ convertBtn.addEventListener('click', async () => {
   updateChart(to, rate);
 });
 
-// === Histórico ===
 function addToHistory(entry) {
   const li = document.createElement('li');
   li.textContent = entry;
   historyList.prepend(li);
 }
 
-// === Gráfico ===
 function updateChart(currency, rate) {
   if (chart) chart.destroy();
 
@@ -86,7 +82,6 @@ function updateChart(currency, rate) {
   });
 }
 
-// === Tema claro/escuro ===
 toggleBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';

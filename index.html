@@ -8,26 +8,38 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="top-bar">
-      <h1>Conversor de Moedas</h1>
-      <button id="toggleTheme">🌙</button>
+  <div class="main-layout">
+    <div class="container">
+      <div class="top-bar">
+        <h1>Conversor de Moedas</h1>
+        <button id="toggleTheme" aria-label="Alternar tema">🌙</button>
+      </div>
+
+      <div class="form">
+        <input type="number" id="amount" placeholder="Valor em moeda de origem" />
+        <select id="fromCurrency"></select>
+        <select id="toCurrency"></select>
+        <button id="convertBtn">Converter</button>
+      </div>
+
+      <div id="loading">⏳ Carregando...</div>
+      <div class="result" id="result"></div>
+
+      <h2>Histórico de Conversões</h2>
+      <ul id="history"></ul>
+
+      <canvas id="chart" width="400" height="200"></canvas>
     </div>
 
-    <div class="form">
-      <input type="number" id="amount" placeholder="Valor em moeda de origem" />
-      <select id="fromCurrency"></select>
-      <select id="toCurrency"></select>
-      <button id="convertBtn">Converter</button>
-    </div>
-
-    <div id="loading">⏳ Carregando...</div>
-    <div class="result" id="result"></div>
-
-    <h2>Histórico de Conversões</h2>
-    <ul id="history"></ul>
-
-    <canvas id="chart" width="400" height="200"></canvas>
+    <aside class="news-panel">
+      <h2>Notícias do Mercado</h2>
+      <ul id="news-list">
+        <li><strong>Dólar</strong> sobe 1,2% após decisão do Fed.</li>
+        <li><strong>Euro</strong> recua frente ao real nesta manhã.</li>
+        <li><strong>Mercado</strong> aguarda dados de inflação dos EUA.</li>
+        <!-- Notícias dinâmicas podem ser inseridas via JS -->
+      </ul>
+    </aside>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
