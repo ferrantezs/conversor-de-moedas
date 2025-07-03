@@ -52,18 +52,17 @@
       <input type="password" id="password" placeholder="Senha" required style="margin-bottom:16px;width:90%;padding:10px;border-radius:6px;border:1px solid #ccc;"><br>
       <button type="submit" class="menu-btn">Entrar</button>
     </form>
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nome = document.getElementById('username').value.trim();
+        const senha = document.getElementById('password').value.trim();
+        if(nome && senha) {
+          localStorage.setItem('usuario_nome', nome);
+          window.location.href = 'home.html'; // Redireciona para homepage.html
+        }
+      });
+    </script>
   </div>
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nome = document.getElementById('username').value.trim();
-      const senha = document.getElementById('password').value.trim();
-      if(nome && senha) {
-        // Aqui você pode salvar o nome no localStorage, se quiser usar depois
-        localStorage.setItem('usuario_nome', nome);
-        window.location.href = 'index.html';
-      }
-    });
-  </script>
 </body>
 </html>
