@@ -5,6 +5,8 @@ const resultDiv = document.getElementById('result');
 const historyList = document.getElementById('history');
 const loading = document.getElementById('loading');
 const toggleBtn = document.getElementById('toggleTheme');
+const NEWS_API_KEY = '3f978b1767c44a0fb65b100b5796350e'; // Substitua pela sua chave da NewsAPI
+const newsList = document.getElementById('news-list');
 
 const API_URL = 'https://api.exchangerate-api.com/v4/latest/';
 let chart;
@@ -85,4 +87,48 @@ function updateChart(currency, rate) {
 toggleBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+});
+
+async function fetchMarketNews() {
+  newsList.innerHTML = '<li>⏳ Carregando notícias...</li>';
+  try {
+    const response = await fetch(
+      `https://newsapi.org/v2/everything?q=(dólar OR euro OR mercado financeiro)&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`
+    );
+    const data = await response.json();
+    newsList.innerHTML = '';
+    if (data.articles && data.articles.length > 0) {
+      data.articles.forEach(article => {
+        const li = document.createElement('li');
+        li.className = 'news-item';
+        li.innerHTML = `
+          ${article.urlToImage ? `<img src="${article.urlToImage}" alt="Imagem da notícia" class="news-img">` : ''}
+          <div class="news-content">
+            <a href="${article.url}" target="_blank"><strong>${article.title}</strong></a>
+            <br>
+            <small>${article.source.name} - ${new Date(article.publishedAt).toLocaleString('pt-BR')}</small>
+          </div>
+        `;
+        newsList.appendChild(li);
+      });
+    } else {
+      newsList.innerHTML = '<li>Nenhuma notícia encontrada.</li>';
+    }
+  } catch (error) {
+    newsList.innerHTML = '<li>Erro ao carregar notícias.</li>';
+  }
+}
+
+// Atualiza ao carregar e a cada 1 hora
+fetchMarketNews();
+setInterval(fetchMarketNews, 60 * 60 * 1000);
+
+window.addEventListener('DOMContentLoaded', () => {
+  const nome = localStorage.getItem('usuario_nome');
+  if (nome) {
+    const saudacao = document.getElementById('saudacao');
+    if (saudacao) {
+      saudacao.textContent = `Olá, ${nome}! 👋`;
+    }
+  }
 });

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Principal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(120deg, #e0eafc, #cfdef3);
+      font-family: 'Inter', sans-serif;
+    }
+    .menu-container {
+      background: #fff;
+      padding: 40px 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .menu-container h1 {
+      margin-bottom: 24px;
+      font-size: 2.2rem;
+      color: #1a237e;
+    }
+    .menu-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+      background: #1a237e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .menu-btn:hover {
+      background: #3949ab;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <h1>Bem-vindo ao Conversor de Moedas</h1>
+    <p>Converta moedas, veja notícias do mercado e acompanhe tendências!</p>
+    <form id="loginForm" autocomplete="off">
+      <input type="text" id="username" placeholder="Seu nome" required style="margin-bottom:10px;width:90%;padding:10px;border-radius:6px;border:1px solid #ccc;"><br>
+      <input type="password" id="password" placeholder="Senha" required style="margin-bottom:16px;width:90%;padding:10px;border-radius:6px;border:1px solid #ccc;"><br>
+      <button type="submit" class="menu-btn">Entrar</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('username').value.trim();
+      const senha = document.getElementById('password').value.trim();
+      if(nome && senha) {
+        // Aqui você pode salvar o nome no localStorage, se quiser usar depois
+        localStorage.setItem('usuario_nome', nome);
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>

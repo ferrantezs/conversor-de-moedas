@@ -222,15 +222,11 @@ canvas {
 }
 
 .news-panel {
-  background: var(--card-bg);
+  background: #f9f9f9;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
-  padding: 2rem 1.5rem;
-  width: 320px;
-  min-width: 240px;
-  max-width: 100%;
-  margin-top: 3rem;
-  transition: background 0.3s;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  max-width: 350px;
 }
 
 .news-panel h2 {
@@ -244,14 +240,36 @@ canvas {
   margin: 0;
 }
 
-#news-list li {
-  padding: 0.75rem 0;
+.news-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
   border-bottom: 1px solid #eee;
-  font-size: 1rem;
+  padding-bottom: 12px;
 }
 
-#news-list li:last-child {
-  border-bottom: none;
+.news-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #ddd;
+}
+
+.news-content {
+  flex: 1;
+}
+
+.news-content a {
+  color: #1a237e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.news-content a:hover {
+  text-decoration: underline;
 }
 
 .dark-mode .news-panel {
