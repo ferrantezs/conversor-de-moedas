@@ -8,11 +8,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="main-header">
+    <nav class="nav-bar">
+      <div class="logo">Conversor</div>
+      <ul class="nav-links">
+        <li><a href="home.html">Menu</a></li>
+        <li><a href="#perfil">Meu Perfil</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <button id="toggleTheme" class="theme-toggle" aria-label="Alternar tema">🌙</button>
+    </nav>
+  </header>
+
   <div class="main-layout">
     <div class="container">
       <div class="top-bar">
         <h1>Conversor de Moedas</h1>
-        <button id="toggleTheme" aria-label="Alternar tema">🌙</button>
       </div>
       <p id="saudacao" style="margin: 0 0 16px 0; font-weight: 600;"></p>
 
@@ -45,5 +56,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
+  <script>
+  const toggleBtn = document.getElementById('toggleTheme');
+  // Carrega o tema salvo
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    toggleBtn.textContent = '🌞';
+  }
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    toggleBtn.textContent = isDark ? '🌞' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+  </script>
 </body>
 </html>
