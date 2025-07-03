@@ -5,7 +5,7 @@ const resultDiv = document.getElementById('result');
 const historyList = document.getElementById('history');
 const loading = document.getElementById('loading');
 const toggleBtn = document.getElementById('toggleTheme');
-const NEWS_API_KEY = '3f978b1767c44a0fb65b100b5796350e'; // Substitua pela sua chave da NewsAPI
+const NEWS_API_KEY = '3f978b1767c44a0fb65b100b5796350e'; // coloque sua chave aqui
 const newsList = document.getElementById('news-list');
 
 const API_URL = 'https://api.exchangerate-api.com/v4/latest/';
@@ -92,13 +92,14 @@ toggleBtn.addEventListener('click', () => {
 async function fetchMarketNews() {
   newsList.innerHTML = '<li>⏳ Carregando notícias...</li>';
   try {
-    const response = await fetch(
-      `https://newsapi.org/v2/everything?q=(dólar OR euro OR mercado financeiro)&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`
-    );
+    const apiUrl = `https://newsapi.org/v2/everything?q=(dólar OR euro OR mercado financeiro)&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+    const response = await fetch(proxyUrl);
     const data = await response.json();
+    const articles = JSON.parse(data.contents).articles;
     newsList.innerHTML = '';
-    if (data.articles && data.articles.length > 0) {
-      data.articles.forEach(article => {
+    if (articles && articles.length > 0) {
+      articles.forEach(article => {
         const li = document.createElement('li');
         li.className = 'news-item';
         li.innerHTML = `
