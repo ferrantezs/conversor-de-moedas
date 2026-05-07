@@ -169,14 +169,14 @@ async function fetchMarketNews() {
 
   for (const feedUrl of RSS_FEEDS) {
     try {
-      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=5`;
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
       const response = await fetch(url);
       const data = await response.json();
 
       if (data.status !== 'ok' || !data.items?.length) continue;
 
       newsList.innerHTML = '';
-      data.items.forEach(item => {
+      data.items.slice(0, 5).forEach(item => {
         const li = document.createElement('li');
         li.className = 'news-item';
 
