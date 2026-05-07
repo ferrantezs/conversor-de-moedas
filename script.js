@@ -12,7 +12,10 @@ const multiResultSection = document.getElementById('multiResultSection');
 const multiGrid = document.getElementById('multiGrid');
 const newsList = document.getElementById('news-list');
 
-const NEWS_API_KEY = '3f978b1767c44a0fb65b100b5796350e';
+const RSS_FEEDS = [
+  { url: 'https://www.infomoney.com.br/feed/', source: 'InfoMoney' },
+  { url: 'https://g1.globo.com/rss/g1/economia/', source: 'G1 Economia' },
+];
 const API_URL = 'https://api.exchangerate-api.com/v4/latest/';
 
 const TOP_CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'BRL', 'AUD', 'CAD', 'CHF'];
@@ -162,41 +165,63 @@ function updateChart(from, rates) {
 
 async function fetchMarketNews() {
   newsList.innerHTML = '<li>⏳ Carregando notícias...</li>';
-  try {
-    const apiUrl = `https://newsapi.org/v2/everything?q=(dólar OR euro OR mercado financeiro)&language=pt&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`;
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
-    const response = await fetch(proxyUrl);
-    const data = await response.json();
-    const articles = JSON.parse(data.contents).articles;
-    newsList.innerHTML = '';
-    if (articles && articles.length > 0) {
-      articles.forEach(article => {
+
+  for (const feed of RSS_FEEDS) {
+    try {
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
+      const response = await fetch(proxyUrl);
+      const data = await response.json();
+      const xml = new DOMParser().parseFromString(data.contents, 'text/xml');
+      const items = Array.from(xml.querySelectorAll('item')).slice(0, 5);
+
+      if (items.length === 0) continue;
+
+      newsList.innerHTML = '';
+      items.forEach(item => {
+        const title = item.querySelector('title')?.textContent?.trim() || '';
+        const link = item.querySelector('link')?.textContent?.trim() || '';
+        const pubDate = item.querySelector('pubDate')?.textContent || '';
+        const imgUrl =
+          item.querySelector('content')?.getAttribute('url') ||
+          item.querySelector('enclosure')?.getAttribute('url') ||
+          '';
+
         const li = document.createElement('li');
         li.className = 'news-item';
-        const img = article.urlToImage
-          ? `<img src="${article.urlToImage}" alt="" class="news-img">`
-          : '';
+
+        if (imgUrl) {
+          const img = document.createElement('img');
+          img.src = imgUrl;
+          img.alt = '';
+          img.className = 'news-img';
+          li.appendChild(img);
+        }
+
         const div = document.createElement('div');
         div.className = 'news-content';
-        const link = document.createElement('a');
-        if (article.url && article.url.startsWith('http')) link.href = article.url;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.textContent = article.title;
+
+        const a = document.createElement('a');
+        if (link.startsWith('http')) a.href = link;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = title;
+
         const small = document.createElement('small');
-        small.textContent = `${article.source.name} · ${new Date(article.publishedAt).toLocaleDateString('pt-BR')}`;
-        div.appendChild(link);
+        const date = pubDate ? new Date(pubDate).toLocaleDateString('pt-BR') : '';
+        small.textContent = `${feed.source}${date ? ' · ' + date : ''}`;
+
+        div.appendChild(a);
         div.appendChild(small);
-        li.innerHTML = img;
         li.appendChild(div);
         newsList.appendChild(li);
       });
-    } else {
-      newsList.innerHTML = '<li>Nenhuma notícia encontrada.</li>';
+      return;
+    } catch {
+      continue;
     }
-  } catch {
-    newsList.innerHTML = '<li>Erro ao carregar notícias.</li>';
   }
+
+  newsList.innerHTML = '<li>Erro ao carregar notícias.</li>';
 }
 
 fetchMarketNews();
