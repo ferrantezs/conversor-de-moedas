@@ -13,8 +13,9 @@ const multiGrid = document.getElementById('multiGrid');
 const newsList = document.getElementById('news-list');
 
 const RSS_FEEDS = [
-  { url: 'https://www.infomoney.com.br/feed/', source: 'InfoMoney' },
-  { url: 'https://g1.globo.com/rss/g1/economia/', source: 'G1 Economia' },
+  'https://www.infomoney.com.br/feed/',
+  'https://g1.globo.com/rss/g1/economia/',
+  'https://www.cnnbrasil.com.br/economia/feed/',
 ];
 const API_URL = 'https://api.exchangerate-api.com/v4/latest/';
 
@@ -166,32 +167,22 @@ function updateChart(from, rates) {
 async function fetchMarketNews() {
   newsList.innerHTML = '<li>⏳ Carregando notícias...</li>';
 
-  for (const feed of RSS_FEEDS) {
+  for (const feedUrl of RSS_FEEDS) {
     try {
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
-      const response = await fetch(proxyUrl);
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=5`;
+      const response = await fetch(url);
       const data = await response.json();
-      const xml = new DOMParser().parseFromString(data.contents, 'text/xml');
-      const items = Array.from(xml.querySelectorAll('item')).slice(0, 5);
 
-      if (items.length === 0) continue;
+      if (data.status !== 'ok' || !data.items?.length) continue;
 
       newsList.innerHTML = '';
-      items.forEach(item => {
-        const title = item.querySelector('title')?.textContent?.trim() || '';
-        const link = item.querySelector('link')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent || '';
-        const imgUrl =
-          item.querySelector('content')?.getAttribute('url') ||
-          item.querySelector('enclosure')?.getAttribute('url') ||
-          '';
-
+      data.items.forEach(item => {
         const li = document.createElement('li');
         li.className = 'news-item';
 
-        if (imgUrl) {
+        if (item.thumbnail) {
           const img = document.createElement('img');
-          img.src = imgUrl;
+          img.src = item.thumbnail;
           img.alt = '';
           img.className = 'news-img';
           li.appendChild(img);
@@ -201,14 +192,14 @@ async function fetchMarketNews() {
         div.className = 'news-content';
 
         const a = document.createElement('a');
-        if (link.startsWith('http')) a.href = link;
+        if (item.link?.startsWith('http')) a.href = item.link;
         a.target = '_blank';
         a.rel = 'noopener';
-        a.textContent = title;
+        a.textContent = item.title;
 
         const small = document.createElement('small');
-        const date = pubDate ? new Date(pubDate).toLocaleDateString('pt-BR') : '';
-        small.textContent = `${feed.source}${date ? ' · ' + date : ''}`;
+        const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString('pt-BR') : '';
+        small.textContent = `${data.feed.title}${date ? ' · ' + date : ''}`;
 
         div.appendChild(a);
         div.appendChild(small);
