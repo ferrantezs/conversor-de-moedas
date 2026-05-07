@@ -2,54 +2,84 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conversor de Moedas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="main-header">
+  <header class="main-header glass">
     <nav class="nav-bar">
-      <div class="logo">Conversor</div>
+      <a href="home.html" class="logo">💱 Conversor</a>
       <ul class="nav-links">
-        <li><a href="home.html">Menu</a></li>
-        <li><a href="#perfil">Meu Perfil</a></li>
-        <li><a href="#contato">Contato</a></li>
+        <li><a href="#historico">Histórico</a></li>
+        <li><a href="index.html">Sair</a></li>
       </ul>
       <button id="toggleTheme" class="theme-toggle" aria-label="Alternar tema">🌙</button>
     </nav>
   </header>
 
-  <div class="main-layout">
-    <div class="container">
-      <div class="top-bar">
-        <h1>Conversor de Moedas</h1>
-      </div>
-      <p id="saudacao" style="margin: 0 0 16px 0; font-weight: 600;"></p>
+  <div class="page-wrapper">
+    <main class="main-content">
 
-      <div class="form">
-        <input type="number" id="amount" placeholder="Valor em moeda de origem" />
-        <select id="fromCurrency"></select>
-        <select id="toCurrency"></select>
-        <button id="convertBtn">Converter</button>
-      </div>
+      <!-- Converter -->
+      <section class="card glass converter-card">
+        <div class="card-header">
+          <h1>Conversor de Moedas</h1>
+          <p id="saudacao" class="greeting"></p>
+        </div>
 
-      <div id="loading">⏳ Carregando...</div>
-      <div class="result" id="result"></div>
+        <div class="converter-form">
+          <input type="number" id="amount" placeholder="Digite o valor" min="0" />
 
-      <h2>Histórico de Conversões</h2>
-      <ul id="history"></ul>
+          <div class="currency-row">
+            <select id="fromCurrency"></select>
+            <button id="swapBtn" class="swap-btn" title="Trocar moedas">⇄</button>
+            <select id="toCurrency"></select>
+          </div>
 
-      <canvas id="chart" width="400" height="200"></canvas>
-    </div>
+          <button id="convertBtn" class="btn-primary full">Converter</button>
+        </div>
 
-    <aside class="news-panel">
-      <h2>Notícias do Mercado</h2>
+        <div id="resultArea" class="result-area hidden">
+          <div class="main-result">
+            <span id="resultText"></span>
+            <button id="copyBtn" class="icon-btn" title="Copiar resultado">📋</button>
+          </div>
+          <p id="rateInfo" class="rate-info"></p>
+        </div>
+      </section>
+
+      <!-- Outras moedas -->
+      <section id="multiResultSection" class="card glass hidden">
+        <h2 class="section-title">Outras moedas</h2>
+        <div id="multiGrid" class="multi-grid"></div>
+      </section>
+
+      <!-- Gráfico -->
+      <section class="card glass">
+        <h2 class="section-title">Taxa comparativa</h2>
+        <canvas id="chart"></canvas>
+      </section>
+
+      <!-- Histórico -->
+      <section id="historico" class="card glass">
+        <div class="section-header">
+          <h2 class="section-title">Histórico</h2>
+          <button id="clearHistoryBtn" class="btn-ghost">Limpar</button>
+        </div>
+        <ul id="history" class="history-list">
+          <li class="history-empty">Nenhuma conversão ainda.</li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Notícias -->
+    <aside class="news-panel glass">
+      <h2 class="section-title">Notícias do Mercado</h2>
       <ul id="news-list">
-        <li><strong>Dólar</strong> sobe 1,2% após decisão do Fed.</li>
-        <li><strong>Euro</strong> recua frente ao real nesta manhã.</li>
-        <li><strong>Mercado</strong> aguarda dados de inflação dos EUA.</li>
-        <!-- Notícias dinâmicas podem ser inseridas via JS -->
+        <li>⏳ Carregando notícias...</li>
       </ul>
     </aside>
   </div>
@@ -57,18 +87,17 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
   <script>
-  const toggleBtn = document.getElementById('toggleTheme');
-  // Carrega o tema salvo
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    toggleBtn.textContent = '🌞';
-  }
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    toggleBtn.textContent = isDark ? '🌞' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
+    const toggleBtn = document.getElementById('toggleTheme');
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      toggleBtn.textContent = '🌞';
+    }
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      toggleBtn.textContent = isDark ? '🌞' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
   </script>
 </body>
 </html>
